@@ -1,5 +1,14 @@
+# Virtual environment
 .venv/
+
+# Data files
 data/
+
+# Build artifacts
 *.egg-info/
+
+# Header files
 *.h
+
+# Python cache
 __pycache__/
