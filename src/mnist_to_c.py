@@ -18,9 +18,6 @@ y_test = to_categorical(y_test)
 print(x_train.shape)
 print(x_test.shape)
 
-NUM_TRAINING_DATA = 30000   # Max 60000
-NUM_TEST_DATA = 10000       # Max 10000
-
 def generate_train_data():
     '''
     Generates two header files. The first one contains as many training data according to the 
@@ -81,13 +78,21 @@ def generate_test_data():
         f.write("}\n};")
 
 
+# ...existing code...
+
 def main():
     import argparse
 
     parser = argparse.ArgumentParser(description="Generate MNIST data as C header files.")
     parser.add_argument("--generate-train", action="store_true", help="Generate training data header files.")
     parser.add_argument("--generate-test", action="store_true", help="Generate test data header files.")
+    parser.add_argument("--num-training-data", type=int, default=30000, help="Number of training data samples to generate (max 60000).")
+    parser.add_argument("--num-test-data", type=int, default=10000, help="Number of test data samples to generate (max 10000).")
     args = parser.parse_args()
+
+    global NUM_TRAINING_DATA, NUM_TEST_DATA
+    NUM_TRAINING_DATA = args.num_training_data
+    NUM_TEST_DATA = args.num_test_data
 
     if args.generate_train:
         generate_train_data()
