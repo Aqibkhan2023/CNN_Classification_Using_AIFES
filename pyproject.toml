@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools", "setuptools_scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mnist-dataset-extractor"
+version = "0.1.0"
+description = "A project to extract and work with the MNIST dataset"
+authors = [
+    { name = "Aqib Khan", email = "maqibkhan234@gmail.com" }
+]
+requires-python = ">=3.11" # Requires 64-bit Python
+dependencies = [
+    "tensorflow==2.16.1",
+    "numpy",
+    "matplotlib",
+    "torch",
+    "torchvision"
+]
+readme = "README.md"
+
+[tool.setuptools]
+packages = ["src"]
+
+[project.scripts]
+mnist-c = "src.mnist_to_c:main"
