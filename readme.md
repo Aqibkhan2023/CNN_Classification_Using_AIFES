@@ -32,7 +32,7 @@ This project demonstrates a Convolutional Neural Network (CNN) implementation us
 1. **Clone the Repository**
 
    ```bash
-   git clone <repository_url>
+   git clone https://github.com/Aqibkhan2023/CNN_Classification_Using_AIFES
    cd CNN_Classification_Using_AIFES
    ```
 
@@ -69,7 +69,7 @@ This project demonstrates a Convolutional Neural Network (CNN) implementation us
 
 ## Acknowledgments
 
-- [AIfES](https://github.com/YourAIfESRepo) framework for inspiration.
+- [AIfES](https://github.com/Fraunhofer-IMS/AIfES_for_Arduino) framework for inspiration.
 - TensorFlow for the MNIST dataset utilities.
 
 Happy Coding!
