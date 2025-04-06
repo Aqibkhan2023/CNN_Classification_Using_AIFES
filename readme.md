@@ -48,10 +48,10 @@ This project demonstrates a Convolutional Neural Network (CNN) implementation us
 
 3. **Convert the MNIST Dataset (Optional)**
 
-   To generate C header files from the MNIST dataset:
+   To generate C header files from the MNIST dataset, run the following command while being in the root directory of the project:
 
    ```bash
-   python src/mnist_to_c.py --generate-train --generate-test --num-training-data 1000 --num-test-data 200
+   mnist-c --generate-train --generate-test --num-training-data 1000 --num-test-data 200
    ```
 
 4. **Build and Run in Code::Blocks**
