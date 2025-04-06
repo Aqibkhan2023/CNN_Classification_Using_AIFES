@@ -1,10 +1,8 @@
-# This script converts the MNIST data set to C header files. The data set is stored in two-dimensional
-# arrays. The first header file contains the training data and the second header file contains the
-# labels belonging to the training data. The same is done for the test data.
+# This script converts the MNIST data set to C header files. The data set is stored as a flattened
+# one-dimensional array for each of training and test data, rather than a two-dimensional array.
 
 import tensorflow as tf
 from tensorflow.keras.utils import to_categorical
-
 
 # Load and preprocess the MNIST data set
 (x_train, y_train), (x_test, y_test) = tf.keras.datasets.mnist.load_data()
@@ -20,65 +18,55 @@ print(x_test.shape)
 
 def generate_train_data():
     '''
-    Generates two header files. The first one contains as many training data according to the 
-    number defined above. The second header file contains the labels belonging to the training 
-    data. The training data and labels are both stored in a two-dimensional array.
+    Generates two header files. The first one contains the training data as a one-dimensional array.
+    Instead of [NUM_TRAINING_DATA][784], it is declared as [NUM_TRAINING_DATA*784].
+    The second header file contains the training labels as a one-dimensional array ([NUM_TRAINING_DATA*10]).
     '''
-
+    total_train_values = NUM_TRAINING_DATA * 784
     with open("MNIST_training_data.h", "w") as f:    
-        f.write("float MNIST_training_data[" + str(NUM_TRAINING_DATA) + "][784] = {\n")
-        for i in range(0,NUM_TRAINING_DATA):
-            if i != 0:
-                f.write("},\n")
-            x_train_flatten = x_train[i].flatten()
-            f.write("{" + str(x_train_flatten[0]) + "f")
-            for j in range(1,784):
-                f.write(", " + str(x_train_flatten[j]) + "f")
-        f.write("}\n};")
-
-
+        f.write("float MNIST_training_data[" + str(total_train_values) + "] = {\n")
+        values = []
+        for i in range(NUM_TRAINING_DATA):
+            x_train_flat = x_train[i].flatten()
+            # Append each value formatted as float literal
+            values.extend([f"{val}f" for val in x_train_flat])
+        f.write(", ".join(values))
+        f.write("\n};\n")
+        
+    total_train_labels = NUM_TRAINING_DATA * 10
     with open("MNIST_training_data_label.h", "w") as f:    
-        f.write("float MNIST_training_data_label[" + str(NUM_TRAINING_DATA) + "][10] = {\n")
-        for i in range(0,NUM_TRAINING_DATA):
-            if i != 0:
-                f.write("},\n")
-            f.write("{" + str(y_train[i][0]) + "f")
-            for j in range(1,10):
-                f.write(", " + str(y_train[i][j]) + "f")
-        f.write("}\n};")
-
+        f.write("float MNIST_training_data_label[" + str(total_train_labels) + "] = {\n")
+        values = []
+        for i in range(NUM_TRAINING_DATA):
+            # For each sample, append one-hot label values formatted as float literal
+            values.extend([f"{val}f" for val in y_train[i]])
+        f.write(", ".join(values))
+        f.write("\n};\n")
 
 def generate_test_data():
     '''
-    Generates two header files. The first one contains as many test data according to the 
-    number defined above. The second header file contains the labels belonging to the test 
-    data. The test data and labels are both stored in a two-dimensional array.
+    Generates two header files. The first one contains the test data as a one-dimensional array.
+    It is declared as [NUM_TEST_DATA*784]. The second header file contains the test labels as a one-dimensional
+    array ([NUM_TEST_DATA*10]).
     '''
-
+    total_test_values = NUM_TEST_DATA * 784
     with open("MNIST_test_data.h", "w") as f:    
-        f.write("float MNIST_test_data[" + str(NUM_TEST_DATA) + "][784] = {\n")
-        for i in range(0,NUM_TEST_DATA):
-            if i != 0:
-                f.write("},\n")
-            x_test_flatten = x_test[i].flatten()
-            f.write("{" + str(x_test_flatten[0]) + "f")
-            for j in range(1,784):
-                f.write(", " + str(x_test_flatten[j]) + "f")
-        f.write("}\n};")
-
-
+        f.write("float MNIST_test_data[" + str(total_test_values) + "] = {\n")
+        values = []
+        for i in range(NUM_TEST_DATA):
+            x_test_flat = x_test[i].flatten()
+            values.extend([f"{val}f" for val in x_test_flat])
+        f.write(", ".join(values))
+        f.write("\n};\n")
+    
+    total_test_labels = NUM_TEST_DATA * 10
     with open("MNIST_test_data_label.h", "w") as f:    
-        f.write("float MNIST_test_data_label[" + str(NUM_TEST_DATA) + "][10] = {\n")
-        for i in range(0,NUM_TEST_DATA):
-            if i != 0:
-                f.write("},\n")
-            f.write("{" + str(y_test[i][0]) + "f")
-            for j in range(1,10):
-                f.write(", " + str(y_test[i][j]) + "f")
-        f.write("}\n};")
-
-
-# ...existing code...
+        f.write("float MNIST_test_data_label[" + str(total_test_labels) + "] = {\n")
+        values = []
+        for i in range(NUM_TEST_DATA):
+            values.extend([f"{val}f" for val in y_test[i]])
+        f.write(", ".join(values))
+        f.write("\n};\n")
 
 def main():
     import argparse
@@ -98,7 +86,6 @@ def main():
         generate_train_data()
     if args.generate_test:
         generate_test_data()
-
 
 if __name__ == "__main__":
     main()
